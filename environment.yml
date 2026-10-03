@@ -6,6 +6,7 @@ dependencies:
   - pip
   - jupyterlab
   - ipykernel
+  - psutil  # memory checks in run_conversion_fast.ipynb and tools/benchmark_conversion.py
   - pip:
       - -r requirements/conversion.txt
       - -r requirements/registration.txt

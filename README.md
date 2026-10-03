@@ -86,6 +86,16 @@ scanner_manifest = None  # Optional image,scanner CSV for mixed batches
 
 The reader loads each source once at the finest resolution needed, then creates every requested output from that loaded image. You may choose any number of resolutions. Set an MPP to `0` to include native resolution. Command-line usage remains available, including multiple folders and MPP values in one command; see the guide.
 
+### Fast conversion of DICOM (Pramana) slides
+
+`01_conversion_downsampling/run_conversion_fast.ipynb` (or `streaming_conversion.py`) writes the same files as the converter above for `.dcm` slides, pixel for pixel, but streams each slide in bands instead of loading it whole, and converts several slides at once:
+
+```powershell
+python 01_conversion_downsampling/streaming_conversion.py "D:\data\Pramana" --output "D:\data\Pramana" --folder 2x 40x --mpp 5 0.25 --save-ome 0 1 --scanner Pramana --workers 4
+```
+
+On a 24-core, 128 GB workstation, single slides converted 1.6x faster with 5-18x less peak memory (for example 220 s / 82 GB down to 137 s / 9 GB), and the low memory allows several slides in parallel. `tools/benchmark_conversion.py` repeats this comparison on your own slides and checks every output page is identical.
+
 ## Processing times
 
 Every stage saves a separate CSV under its output/input `timings/` folder, recording per-image timings and scanner identity. Conversion separates the shared read, each output resolution's resize/save time, and the image total. MATLAB calculation and Python application also record per-image and batch totals.
