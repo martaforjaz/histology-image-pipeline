@@ -234,7 +234,10 @@ def validate_file(job):
         check_tiff_directories(path)
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter('always')
-            with tifffile.TiffFile(path) as tif:
+            # Streamed TIFFs can interleave pyramid tiles. A larger read buffer
+            # avoids a separate network request for every small tile even when
+            # offsets are not contiguous; decoding remains tile by tile.
+            with path.open('rb', buffering=16 << 20) as handle, tifffile.TiffFile(handle) as tif:
                 main = tif.pages[0]
                 result.update(width=main.imagewidth, height=main.imagelength)
                 mx, my = read_tiff_mpp(path)
