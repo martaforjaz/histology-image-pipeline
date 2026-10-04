@@ -34,7 +34,8 @@ METHOD = ('PASS means complete TIFF decoding (all stored pages and pyramid level
           'consistent with the raw source (1 pixel rounding tolerance). '
           'This is not a raw-to-output pixel equality or tissue-quality assessment. '
           'FAIL means a detected problem or missing/unfinished output. REVIEW means '
-          'verification could not be completed. Missing outputs may not have been generated yet.')
+          'verification could not be completed. Inventory is a snapshot at scan start. '
+          'Missing outputs may not have been generated yet; .part saves may be in progress or interrupted.')
 
 
 def image_key(name):
@@ -219,11 +220,11 @@ def validate_file(job):
                   mpp_x=None, mpp_y=None, pages_checked=0, full_decode=False,
                   source_check='NOT CHECKED', seconds=0)
     if job['missing']:
-        result['reason'] = 'Missing output (may not have been generated yet)'
+        result['reason'] = 'Missing output at scan start (may not have been generated yet)'
         return result
     path = Path(job['path'])
     if path.name.lower().endswith('.part'):
-        result['reason'] = 'Unfinished .part file; final output has not been committed'
+        result['reason'] = 'Unfinished .part at scan start; save may be in progress or interrupted. Not decoded.'
         return result
     handler = TiffMessages()
     logger = logging.getLogger('tifffile')

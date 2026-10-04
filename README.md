@@ -150,6 +150,9 @@ folder. Full decoding over a network can take hours. The default is two concurre
 checks with a 30-minute timeout per file; change these with `--workers` and
 `--timeout` (seconds). A timeout is reported as unverified, not as proven corruption.
 Files still ending in `.part` are reported as unfinished without decoding them.
+The inventory is a snapshot at scan start. If conversion is still running, missing
+or unfinished entries can become complete later; rerun the check after conversion
+finishes to assess those new outputs.
 
 Local checks cover TIFF/OME metadata and export, a generated CZI file read by the actual CZI backend, simulated VSI input, affine and elastic transforms, boundary filling, dotted filenames, reference-image handling, and scale factors corresponding to the example 10x/20x/40x workflow.
 
