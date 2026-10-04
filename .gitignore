@@ -42,3 +42,6 @@ summary.csv
 batch_totals.csv
 coverage.csv
 scanners.csv
+# Local validation reports include research filenames and paths.
+downsampling_validation_*.xlsx
+downsampling_validation_*.json

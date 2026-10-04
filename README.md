@@ -125,6 +125,32 @@ The optional inventory identifies images without measurements. Reports provide i
 
 ## Validation status
 
+To check saved `2x` and `40x` images and produce a colour-coded Excel report:
+
+```powershell
+python -m pip install -r requirements/validation.txt
+python tools/validate_downsampling.py
+```
+
+The script asks for the scanner folder. It checks every stored TIFF page and
+pyramid level, pixel spacing, and dimensions against matching raw-source metadata.
+Hamamatsu and P1000/MRXS source metadata are read through OpenSlide. It never
+modifies images. Green means the checks passed, red identifies missing/unfinished
+outputs or detected problems, and amber means verification could not be completed.
+This checks saved-file integrity and resolution, not pixel equality with the raw scan.
+
+You can also supply the folder directly:
+
+```powershell
+python tools/validate_downsampling.py --scanner "D:\scans\Hamamatsu_S210_40x"
+```
+
+The timestamped `.xlsx` report and a JSON checkpoint are saved inside the scanner
+folder. Full decoding over a network can take hours. The default is two concurrent
+checks with a 30-minute timeout per file; change these with `--workers` and
+`--timeout` (seconds). A timeout is reported as unverified, not as proven corruption.
+Files still ending in `.part` are reported as unfinished without decoding them.
+
 Local checks cover TIFF/OME metadata and export, a generated CZI file read by the actual CZI backend, simulated VSI input, affine and elastic transforms, boundary filling, dotted filenames, reference-image handling, and scale factors corresponding to the example 10x/20x/40x workflow.
 
 An optional MATLAB integration check runs CODA on generated images and compares a Python affine warp and constant-displacement warp against MATLAB outputs. See [validation results and limits](docs/VALIDATION.md). These checks do **not** establish accuracy on every scanner or on research datasets; inspect overlays for each dataset.
