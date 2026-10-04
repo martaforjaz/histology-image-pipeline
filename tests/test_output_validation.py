@@ -101,6 +101,13 @@ class OutputValidationTests(unittest.TestCase):
         self.write()
         self.assertEqual(self.check()['status'], 'REVIEW')
 
+    def test_network_read_error_is_unverified_not_corrupt(self):
+        self.write()
+        with patch.object(validation, 'check_tiff_directories', side_effect=OSError('Network read failed')):
+            result = self.check()
+        self.assertEqual(result['status'], 'REVIEW')
+        self.assertFalse(result['full_decode'])
+
     def test_cyclic_directory_is_rejected(self):
         self.write()
         with self.path.open('r+b') as f:

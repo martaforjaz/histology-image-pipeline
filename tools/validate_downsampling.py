@@ -293,7 +293,7 @@ def validate_file(job):
         result['status'] = 'FAIL' if issues else ('REVIEW' if reviews else 'PASS')
         result['reason'] = '; '.join(issues + reviews) or 'All integrity, resolution and source-dimension checks passed'
     except Exception as exc:
-        if isinstance(exc, (PermissionError, FileNotFoundError, ImportError)):
+        if isinstance(exc, (OSError, ImportError)):
             result['status'] = 'REVIEW'
         result['reason'] = f'{type(exc).__name__}: {exc}'
     finally:
@@ -376,7 +376,8 @@ def write_excel(report, path):
         ws.column_dimensions[column].width = width
     for row in range(8, ws.max_row+1):
         ws.cell(row, 4).alignment = Alignment(wrap_text=True, vertical='top')
-        ws.row_dimensions[row].height = 42
+        reason = str(ws.cell(row, 4).value or '')
+        ws.row_dimensions[row].height = min(400, max(42, 16*math.ceil(len(reason)/85)))
     ws.merge_cells('B4:M4')
     ws['B4'].alignment = Alignment(wrap_text=True, vertical='top')
     ws.row_dimensions[4].height = 48
