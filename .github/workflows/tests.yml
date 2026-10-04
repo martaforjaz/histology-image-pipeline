@@ -19,4 +19,26 @@ jobs:
       - run: python -m pip install -r requirements/registration.txt -r requirements/scanners.txt
       - run: python -m unittest discover -s tests -v
       - run: python 01_conversion_downsampling/run_conversion.py --help
+      - run: python 01_conversion_downsampling/streaming_conversion.py --help
       - run: python 03_apply_registration/run_apply_registration.py --help
+
+  conda-environment:
+    # Builds environment.yml exactly as users do, then runs the tests inside it
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          environment-file: environment.yml
+          activate-environment: histology-pipeline
+          miniforge-version: latest
+      - run: python -c "import wsidicom, psutil, openslide, slideio, tifffile, jupyterlab"
+      - run: python -m unittest discover -s tests -v
+      - run: python 01_conversion_downsampling/streaming_conversion.py --help

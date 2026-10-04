@@ -86,6 +86,31 @@ scanner_manifest = None  # Optional image,scanner CSV for mixed batches
 
 The reader loads each source once at the finest resolution needed, then creates every requested output from that loaded image. You may choose any number of resolutions. Set an MPP to `0` to include native resolution. Command-line usage remains available, including multiple folders and MPP values in one command; see the guide.
 
+### Fast, low-memory conversion
+
+`01_conversion_downsampling/run_conversion_fast.ipynb` (or `streaming_conversion.py`) writes the same files as the converter above, pixel for pixel, for every supported format, and converts several slides at once:
+
+```powershell
+python 01_conversion_downsampling/streaming_conversion.py "D:\data\Hamamatsu_S210" --output "D:\data\Hamamatsu_S210" --folder 2x 40x --mpp 5 0.25 --save-ome 0 1 --scanner "Hamamatsu S210" --workers 4
+```
+
+- `.dcm`, `.ndpi`/`.ndp`, `.svs`, `.scn`, `.mrxs`, `.qptiff` and whole-slide `.tif` (e.g. Ventana) are streamed in bands and never held in memory whole.
+- `.vsi`, `.czi`, iSyntax and plain TIFFs are read by the original readers (whole slide in memory) and then written the same way; use fewer workers for these.
+- Files are written as `*.part` and renamed when complete, so an interrupted run never leaves a partial image that a restart would skip.
+
+Measured on a 24-core, 128 GB workstation (one slide at a time, outputs 2x + 40x OME-TIFF, every page identical to the original):
+
+| Format | Original: time / peak RAM | Fast: time / peak RAM |
+|---|---|---|
+| Hamamatsu `.ndpi` (0.6 Gpx) | 25 s / 8.8 GB | 16 s / 2.3 GB |
+| Leica `.svs`, with ICC | 80 s / 19.3 GB | 39 s / 3.3 GB |
+| Roche Ventana `.tif` | 46 s / 10.7 GB | 23 s / 2.7 GB |
+| Pramana `.dcm` (4.9 Gpx) | 220 s / 82 GB | 137 s / 8.8 GB |
+| Olympus `.vsi` | 24 s / 5.0 GB | 21 s / 2.5 GB |
+| Zeiss `.czi` | 442 s / 32.5 GB | 627 s / 12.7 GB |
+
+A 19-gigapixel P1000 `.mrxs` slide ran out of memory in the original converter at 40x. `tools/benchmark_conversion.py` repeats this comparison on your own slides and checks every output page.
+
 ## Processing times
 
 Every stage saves a separate CSV under its output/input `timings/` folder, recording per-image timings and scanner identity. Conversion separates the shared read, each output resolution's resize/save time, and the image total. MATLAB calculation and Python application also record per-image and batch totals.
