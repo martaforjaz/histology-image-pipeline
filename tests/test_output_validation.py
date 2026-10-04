@@ -1,6 +1,7 @@
 """Integrity checks must catch incomplete exports without modifying images."""
 from pathlib import Path
 import importlib.util
+import json
 import struct
 import sys
 import tempfile
@@ -129,6 +130,20 @@ class OutputValidationTests(unittest.TestCase):
             result = validation.run_isolated(job, 1)
         self.assertEqual(result['status'], 'REVIEW')
         self.assertFalse(result['full_decode'])
+
+    def test_checkpoint_retries_temporary_windows_file_lock(self):
+        target = self.root / 'checkpoint.json'
+        original = Path.replace
+        calls = []
+        def replace(path, destination):
+            calls.append(path)
+            if len(calls) < 3:
+                raise PermissionError('Report temporarily open in another process')
+            return original(path, destination)
+        with patch.object(Path, 'replace', replace), patch.object(validation.time, 'sleep'):
+            validation.save_json_atomic({'complete':False, 'results':[{'status':'PASS'}]}, target)
+        self.assertEqual(len(calls), 3)
+        self.assertEqual(json.loads(target.read_text())['results'][0]['status'], 'PASS')
 
     def test_valid_ome_pyramid_checks_every_page(self):
         import WSI2OMEtif_All_file_types as converter

@@ -390,6 +390,20 @@ def write_excel(report, path):
     temporary.replace(path)
 
 
+def save_json_atomic(report, checkpoint):
+    """Keep the prior checkpoint intact while retrying transient Windows locks."""
+    temporary = checkpoint.with_suffix('.json.tmp')
+    temporary.write_text(json.dumps(report, indent=2), encoding='utf-8')
+    for attempt in range(50):
+        try:
+            temporary.replace(checkpoint)
+            return
+        except PermissionError:
+            if attempt == 49:
+                raise
+            time.sleep(.1)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--scanner', type=Path, help='Scanner folder containing raw files and 2x/40x')
@@ -438,12 +452,10 @@ def main():
     jobs.sort(key=lambda j: (not (j['missing'] or j['filename'].lower().endswith('.part')),
                              j['folder'] != '2x', j['image']))
     report = dict(scanner=str(args.scanner), checked_at=now.isoformat(), method=METHOD, complete=False,
-                  expected_outputs=len(jobs), results=[])
+                  expected_outputs=len(jobs), inventory=jobs, results=[])
     print(f'{len(jobs)} expected/existing outputs. Full decoding may take a long time over a network.', flush=True)
     def save_checkpoint():
-        temporary = checkpoint.with_suffix('.json.tmp')
-        temporary.write_text(json.dumps(report, indent=2), encoding='utf-8')
-        temporary.replace(checkpoint)
+        save_json_atomic(report, checkpoint)
     save_checkpoint()
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futures = {pool.submit(run_isolated, job, args.timeout): job for job in jobs}
