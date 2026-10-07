@@ -7,6 +7,8 @@ import tifffile
 import numpy as np
 from PIL import Image, ImageCms
 from pipeline_timing import TimingLog
+from pipeline_timing import active_scanner
+from scanner_calibration import calibrate_mpp
 from openslide import OpenSlide
 from image_metadata import read_tiff_mpp, validate_mpp
 from chunked_readers import read_rgb_chunks, read_openslide_chunks, read_tiff_chunks
@@ -326,6 +328,19 @@ def process_images(pth, output_names, image_list, umpix, save_ome, load_native_r
                             try:
                                 mppx = float(wsi.properties['openslide.mpp-x'])
                                 mppy = float(wsi.properties['openslide.mpp-y'])
+
+                                raw_mppx, raw_mppy = mppx, mppy
+                                mppx, mppy, calibration = calibrate_mpp(
+                                    mppx, mppy, active_scanner(), slide_path)
+                                if calibration != 1.0:
+                                    print(
+                                        f"       ...P1000 MPP calibration x{calibration:.9f}: "
+                                        f"({raw_mppx:.6f}, {raw_mppy:.6f}) -> "
+                                        f"({mppx:.6f}, {mppy:.6f}) um/px")
+                                    image_timing['detail'] += (
+                                        f"; P1000_mpp_multiplier={calibration:.12f}; "
+                                        f"raw_mpp=({raw_mppx:.9f},{raw_mppy:.9f}); "
+                                        f"calibrated_mpp=({mppx:.9f},{mppy:.9f})")
 
                                 # Choose coarsest pyramid level finer than or equal to target_um
                                 level = 0

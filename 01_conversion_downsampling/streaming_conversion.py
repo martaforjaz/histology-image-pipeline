@@ -33,6 +33,8 @@ from PIL import Image
 
 from WSI2OMEtif_All_file_types import SRGB_EXTRATAG
 from image_metadata import validate_mpp
+from pipeline_timing import active_scanner
+from scanner_calibration import calibrate_mpp, is_p1000, P1000_MPP_MULTIPLIER
 
 Image.MAX_IMAGE_PIXELS = None
 OPENSLIDE_TYPES = ('.ndpi', '.ndp', '.svs', '.scn', '.mrxs', '.qptiff')
@@ -400,6 +402,13 @@ class _OpenSlideSource:
         self.slide = OpenSlide(path)
         props = self.slide.properties
         mppx, mppy = mpp or (float(props['openslide.mpp-x']), float(props['openslide.mpp-y']))
+        raw_mppx, raw_mppy = mppx, mppy
+        mppx, mppy, calibration = calibrate_mpp(
+            mppx, mppy, active_scanner(), path)
+        if calibration != 1.0:
+            print(f'P1000 MPP calibration x{calibration:.9f}: '
+                  f'({raw_mppx:.6f}, {raw_mppy:.6f}) -> '
+                  f'({mppx:.6f}, {mppy:.6f}) um/px', flush=True)
         level = 0
         if target_um > 0 and not native:
             for lvl, factor in enumerate(self.slide.level_downsamples):
@@ -607,6 +616,8 @@ def _convert_one(job):
         row['detail'] = (f'implementation=streaming; workers={workers}; threads={threads}; '
                          f'native={native}; folders={folders}; requested_mpp={umpix}; '
                          f'ome={save_ome}')
+        if is_p1000(scanner, slide):
+            row['detail'] += f'; P1000_mpp_multiplier={P1000_MPP_MULTIPLIER:.12f}'
         try:
             written = convert_slide(slide, outpth, folders, umpix, save_ome, threads, native,
                                     pyramid_dir=pyramid_dir, verbose=False)

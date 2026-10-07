@@ -111,6 +111,8 @@ Measured on a 24-core, 128 GB workstation (one slide at a time, outputs 2x + 40x
 
 A 19-gigapixel P1000 `.mrxs` slide ran out of memory in the original converter at 40x. `tools/benchmark_conversion.py` repeats this comparison on your own slides and checks every output page.
 
+P1000 MRXS images receive a documented physical-scale calibration before resizing. The source MPP is multiplied by `1.0133191074458732`, estimated as the median scale from 31 robust feature/RANSAC registrations of five matching physical slides across seven comparison scanners. Set `scanner_name = 'P1000'` (or pass `--scanner P1000`); the P1000 folder name is also recognized as a safeguard. Timing logs record the applied multiplier.
+
 ## Processing times
 
 Every stage saves a separate CSV under its output/input `timings/` folder, recording per-image timings and scanner identity. Conversion separates the shared read, each output resolution's resize/save time, and the image total. MATLAB calculation and Python application also record per-image and batch totals.

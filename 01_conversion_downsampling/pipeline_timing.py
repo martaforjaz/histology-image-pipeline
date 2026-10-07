@@ -38,6 +38,11 @@ def timing_settings(scanner='unknown', scanner_manifest=None):
         _settings.reset(token)
 
 
+def active_scanner():
+    """Scanner selected for the active conversion batch."""
+    return _settings.get()[0]
+
+
 class TimingLog:
     def __init__(self, output, pipeline):
         self.scanner, manifest = _settings.get()
