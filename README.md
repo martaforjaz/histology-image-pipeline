@@ -35,6 +35,7 @@ flowchart LR
 01_conversion_downsampling/   Scanner readers, conversion CLI, pixel-size metadata
 02_calculate_registration/   MATLAB entry point; local CODA installation goes here
 03_apply_registration/       Python transform application and CLI
+04_downsampling_validation/  Slide-ID inventory and 2x/40x validation reports
 docs/                        User guide, converter comparison, provenance, validation
 requirements/                Python dependencies by stage
 tests/                       Synthetic Python tests and optional MATLAB checks
@@ -139,6 +140,7 @@ An optional MATLAB integration check runs CODA on generated images and compares 
 - [Selection and change history](docs/SELECTION.md)
 - [Testing and known limitations](docs/VALIDATION.md)
 - [Using this repository on another computer](docs/GITHUB_WORKFLOW.md)
+- [Dataset downsampling validation](04_downsampling_validation/README.md)
 - [Third-party attribution](THIRD_PARTY_NOTICES.md)
 
 No research images, patient information, network-share paths, MATLAB binaries, or Python virtual environments are included in the repository. Code and documentation are versioned; image data remains in a separately managed location.
