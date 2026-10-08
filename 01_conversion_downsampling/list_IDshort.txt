@@ -1,0 +1,372 @@
+deidentified ID short
+Hum Panc ADC A
+Hum Panc ADC B
+Hum Panc ADC C
+Hum Panc ADC D
+Hum Panc ADC E
+Hum Panc ADC F
+Hum Panc ADC G
+Hum Panc ADC H
+Hum Panc ADC I
+Hum Panc ADC J
+Hum Panc ADC K
+Hum Panc ADC L
+Hum Panc ADC M
+Hum Panc ADC N
+Hum Panc ADC O
+Hum Panc ADC P
+Hum Panc ADC Q
+Hum Panc ADC R
+Hum Panc ADC S
+Hum Panc ADC T
+Hum Panc ADC U
+
+Hum Skin Mel A
+Hum Skin Mel B
+Hum Skin Mel C
+Hum Skin Mel D
+Hum Skin Mel E
+Hum Skin Mel F
+Hum Skin Mel G
+
+Mouse Skin DN A
+Mouse Skin DN B
+Mouse Skin DN C
+Mouse Skin DN D
+Mouse Skin DN E
+
+Mouse Gyn A
+Mouse Gyn B
+Mouse Gyn C
+Mouse Gyn D
+Mouse Gyn E
+Mouse Gyn F
+Mouse Gyn G
+Mouse Gyn H
+Mouse Gyn I
+Mouse Gyn J
+Mouse Gyn K
+Mouse Gyn L
+
+Hum Kid RCC A
+Hum Kid RCC B
+Hum Kid RCC C
+Hum Kid RCC D
+Hum Kid RCC E
+Hum Kid RCC F
+Hum Kid RCC G
+Hum Kid RCC H
+Hum Kid RCC I
+Hum Kid RCC J
+
+Mac Brain A
+Mac Brain B
+Mac Brain C
+Mac Brain D
+Mac Brain E
+Mac Brain F
+Mac Brain G
+Mac Brain H
+Mac Brain I
+
+Hum Skin Lyd A
+Hum Skin Lyd B
+Hum Skin Lyd C
+Hum Skin Lyd D
+Hum Skin Lyd E
+Hum Skin Lyd F
+Hum Skin Lyd G
+Hum Skin Lyd H
+Hum Skin Lyd I
+Hum Skin Lyd J
+Hum Skin Lyd K
+Hum Skin Lyd L
+
+Mouse Fat KPC A
+Mouse Fat KPC B
+Mouse Fat KPC C
+Mouse Fat KPC D
+Mouse Fat KPC E
+Mouse Fat KPC F
+Mouse Fat KPC G
+Mouse Fat KPC H
+
+Mouse Tumor KPC A
+Mouse Tumor KPC B
+Mouse Tumor KPC C
+Mouse Tumor KPC D
+Mouse Tumor KPC E
+Mouse Tumor KPC F
+Mouse Tumor KPC G
+Mouse Tumor KPC H
+Mouse Tumor KPC I
+Mouse Tumor KPC J
+
+Mouse Kid KPC A
+Mouse Kid KPC B
+Mouse Kid KPC C
+Mouse Kid KPC D
+Mouse Kid KPC E
+Mouse Kid KPC F
+Mouse Kid KPC G
+Mouse Kid KPC H
+Mouse Kid KPC I
+Mouse Kid KPC J
+
+Mouse Lung KPC A
+Mouse Lung KPC B
+Mouse Lung KPC C
+Mouse Lung KPC D
+Mouse Lung KPC E
+Mouse Lung KPC F
+Mouse Lung KPC G
+Mouse Lung KPC H
+Mouse Lung KPC I
+Mouse Lung KPC J
+
+Mouse Liv KPC A
+Mouse Liv KPC B
+Mouse Liv KPC C
+Mouse Liv KPC D
+Mouse Liv KPC E
+Mouse Liv KPC F
+Mouse Liv KPC G
+Mouse Liv KPC H
+Mouse Liv KPC I
+Mouse Liv KPC J
+
+Hum FT A
+Hum FT B
+Hum FT C
+Hum FT D
+Hum FT E
+Hum FT F
+Hum FT G
+Hum FT H
+Hum FT I
+Hum FT J
+
+Mac Fetus A
+Mac Fetus B
+Mac Fetus C
+Mac Fetus D
+Mac Fetus E
+Mac Fetus F
+Mac Fetus G
+Mac Fetus H
+Mac Fetus I
+Mac Fetus J
+Mac Fetus K
+Mac Fetus L
+
+Mouse Hrt Myo A
+Mouse Hrt Myo B
+Mouse Hrt Myo C
+Mouse Hrt Myo D
+Mouse Hrt Myo E
+Mouse Hrt Myo F
+Mouse Hrt Myo G
+Mouse Hrt Myo H
+Mouse Hrt Myo I
+Mouse Hrt Myo J
+
+Hum Hrt Sar A
+Hum Hrt Sar B
+Hum Hrt Sar C
+Hum Hrt Sar D
+Hum Hrt Sar E
+Hum Hrt Sar F
+Hum Hrt Sar G
+Hum Hrt Sar H
+Hum Hrt Sar I
+
+Hum Liver HCC A
+Hum Liver HCC B
+Hum Liver HCC C
+Hum Liver HCC D
+Hum Liver HCC E
+Hum Liver HCC F
+Hum Liver HCC G
+Hum Liver HCC H
+Hum Liver HCC I
+Hum Liver HCC J
+Hum Liver HCC K
+Hum Liver HCC L
+
+Hum Panc NET A
+Hum Panc NET B
+Hum Panc NET C
+Hum Panc NET D
+Hum Panc NET E
+Hum Panc NET F
+Hum Panc NET G
+Hum Panc NET H
+Hum Panc NET I
+Hum Panc NET J
+Hum Panc NET K
+Hum Panc NET L
+Hum Panc NET M
+Hum Panc NET N
+Hum Panc NET O
+
+Hum Panc A
+Hum Panc B
+Hum Panc C
+Hum Panc D
+Hum Panc E
+Hum Panc F
+Hum Panc G
+Hum Panc H
+Hum Panc I
+Hum Panc J
+Hum Panc K
+Hum Panc L
+
+Hum Panc M
+Hum Panc N
+Hum Panc O
+Hum Panc P
+Hum Panc Q
+Hum Panc R
+Hum Panc S
+Hum Panc T
+Hum Panc U
+Hum Panc V
+Hum Panc W
+Hum Panc X
+
+Hum Panc IPMN A
+Hum Panc IPMN B
+Hum Panc IPMN C
+Hum Panc IPMN D
+Hum Panc IPMN E
+Hum Panc IPMN F
+Hum Panc IPMN G
+Hum Panc IPMN H
+Hum Panc IPMN I
+Hum Panc IPMN J
+Hum Panc IPMN K
+Hum Panc IPMN L
+Hum Panc IPMN M
+
+Hum Spleen A
+Hum Spleen B
+Hum Spleen C
+Hum Spleen D
+Hum Spleen E
+Hum Spleen F
+Hum Spleen G
+Hum Spleen H
+
+Mouse Fetus A
+Mouse Fetus B
+Mouse Fetus C
+Mouse Fetus D
+Mouse Fetus E
+Mouse Fetus F
+Mouse Fetus G
+Mouse Fetus H
+Mouse Fetus I
+Mouse Fetus J
+
+Mouse Panc KPC A
+Mouse Panc KPC B
+Mouse Panc KPC C
+Mouse Panc KPC D
+Mouse Panc KPC E
+Mouse Panc KPC F
+Mouse Panc KPC G
+Mouse Panc KPC H
+Mouse Panc KPC I
+Mouse Panc KPC J
+
+Mac Kid Fetal A
+
+Hum Pros Cancer A
+Hum Pros Cancer B
+Hum Pros Cancer C
+Hum Pros Cancer D
+Hum Pros Cancer E
+Hum Pros Cancer F
+Hum Pros Cancer G
+Hum Pros Cancer H
+
+Hum Kid Fetal A
+Hum Kid Fetal B
+Hum Kid Fetal C
+Hum Kid Fetal D
+Hum Kid Fetal E
+Hum Kid Fetal F
+
+Hum Colon A
+Hum Colon B
+Hum Colon C
+Hum Colon D
+Hum Colon E
+Hum Colon F
+Hum Colon G
+Hum Colon H
+Hum Colon I
+Hum Colon J
+
+Hum Lung A
+Hum Lung B
+Hum Lung C
+Hum Lung D
+Hum Lung E
+Hum Lung F
+Hum Lung G
+Hum Lung H
+Hum Lung I
+Hum Lung J
+Hum Lung K
+Hum Lung L
+
+Hum Liv PDAC A
+Hum Liv PDAC B
+Hum Liv PDAC C
+Hum Liv PDAC D
+Hum Liv PDAC E
+Hum Liv PDAC F
+Hum Liv PDAC G
+Hum Liv PDAC H
+Hum Liv PDAC I
+Hum Liv PDAC J
+Hum Liv PDAC K
+Hum Liv PDAC L
+Hum Liv PDAC M
+Hum Liv PDAC N
+Hum Liv PDAC O
+Hum Liv PDAC P
+Hum Liv PDAC Q
+Hum Liv PDAC R
+Hum Liv PDAC S
+
+Hum Brst Cancer A
+Hum Brst Cancer B
+Hum Brst Cancer C
+Hum Brst Cancer D
+Hum Brst Cancer E
+Hum Brst Cancer F
+Hum Brst Cancer G
+Hum Brst Cancer H
+Hum Brst Cancer I
+Hum Brst Cancer J
+Hum Brst Cancer K
+Hum Brst Cancer L
+Hum Brst Cancer M
+Hum Brst Cancer N
+Hum Brst Cancer O
+Hum Brst Cancer P
+Hum Brst Cancer Q
+Hum Brst Cancer R
+Hum Brst Cancer S
+
+Hum Liv PDAC CD1A
+Hum Liv PDAC CD20
+Hum Liv PDAC CD68
+Hum Liv PDAC CD163
+Hum Liv PDAC CK8
+Hum Liv PDAC Collagen IV
+Hum Liv PDAC Ki-67
+Hum Liv PDAC vimentin
