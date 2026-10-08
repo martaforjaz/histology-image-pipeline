@@ -144,22 +144,35 @@ def main() -> None:
     output_dir = args.output_dir or args.scanner_path / "validation"
     output_dir.mkdir(parents=True, exist_ok=True)
     ids = read_ids(args.id_list)
+    print(f"Starting validation for scanner: {args.scanner_path.name}", flush=True)
+    print(f"Loaded {len(ids)} slide IDs. Indexing files...", flush=True)
     indexes = {kind: index_files(args.scanner_path if kind == "WSI" else args.scanner_path / kind, kind)
                for kind in ("WSI", "2x", "40x")}
+    for kind in ("WSI", "2x", "40x"):
+        print(f"Indexed {len(indexes[kind])} {kind} file names.", flush=True)
     results = []
-    for slide_id in ids:
+    for number, slide_id in enumerate(ids, start=1):
+        print(f"[{number}/{len(ids)}] Checking slide ID: {slide_id}", flush=True)
         names = {canonical(slide_id)}
         for kind in ("WSI", "2x", "40x"):
             matches = [path for name in names for path in indexes[kind].get(name, [])]
             if not matches:
+                print(f"    {kind}: MISSING", flush=True)
                 results.append({"id": slide_id, "kind": kind, "status": "MISSING", "reason": "No matching file"})
             elif len(matches) > 1:
+                print(f"    {kind}: REVIEW ({len(matches)} matching files)", flush=True)
                 results.append({"id": slide_id, "kind": kind, "status": "REVIEW",
                                 "reason": f"Multiple matching files ({len(matches)})",
                                 "path": "; ".join(str(path) for path in matches)})
             else:
-                result = validate_output(matches[0], kind) if kind != "WSI" else {
-                    "status": "EXISTS", "reason": "Original WSI exists", "path": str(matches[0])}
+                path = matches[0]
+                if kind == "WSI":
+                    result = {"status": "EXISTS", "reason": "Original WSI exists", "path": str(path)}
+                    print(f"    {kind}: EXISTS ({path.name})", flush=True)
+                else:
+                    print(f"    {kind}: opening {path.name}", flush=True)
+                    result = validate_output(path, kind)
+                    print(f"    {kind}: {result['status']} - {result['reason']}", flush=True)
                 result.update(id=slide_id, kind=kind)
                 results.append(result)
     missing = [f"{r['id']}\t{r['kind']}\t{r.get('reason', '')}" for r in results if r["status"] == "MISSING"]
@@ -170,11 +183,12 @@ def main() -> None:
     report = {"scanner_path": str(args.scanner_path), "id_list": str(args.id_list), "results": results}
     (output_dir / "summary.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     counts = Counter(r["status"] for r in results)
-    print(f"Scanner: {args.scanner_path.name}")
-    print(f"IDs: {len(ids)} | checks: {len(results)}")
-    print(" | ".join(f"{status}: {counts.get(status, 0)}" for status in ("EXISTS", "PASS", "MISSING", "FAIL", "REVIEW", "INCOMPLETE")))
-    print(f"Missing list: {output_dir / 'missing.txt'}")
-    print(f"Failed/review list: {output_dir / 'failed_review.txt'}")
+    print("Validation complete.", flush=True)
+    print(f"Scanner: {args.scanner_path.name}", flush=True)
+    print(f"IDs: {len(ids)} | checks: {len(results)}", flush=True)
+    print(" | ".join(f"{status}: {counts.get(status, 0)}" for status in ("EXISTS", "PASS", "MISSING", "FAIL", "REVIEW", "INCOMPLETE")), flush=True)
+    print(f"Missing list: {output_dir / 'missing.txt'}", flush=True)
+    print(f"Failed/review list: {output_dir / 'failed_review.txt'}", flush=True)
 
 
 if __name__ == "__main__":
