@@ -14,6 +14,8 @@ Thumbs.db
 !.env.example
 # Local CODA dependency: install from its upstream project; do not relicense it.
 02_calculate_registration/coda/
+02_calculate_registration/manifests/
+02_calculate_registration/worker_*_results.csv
 # User-provided historical comparator, retained locally but not part of the supported pipeline.
 01_conversion_downsampling/WSI2OMEtif.py
 # Historical machine-specific reports; current results are in docs/VALIDATION.md.

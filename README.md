@@ -70,6 +70,8 @@ jupyter lab
 
 Install the external CODA dependency before calculating new registration transforms; follow the [English user guide](docs/USER_GUIDE.md). Scanner library availability varies by operating system. The original CODA scripts use Windows path conventions, so the supported MATLAB workflow is Windows.
 
+For a shared 2x dataset, [the eight-computer registration guide](02_calculate_registration/README_8_WORKERS.md) provides fixed, non-overlapping slide lists and a MATLAB worker launcher.
+
 To generate several resolutions from each source in one run, edit the settings at the top of `01_conversion_downsampling/run_conversion.py` and click **Run** in PyCharm:
 
 ```python
