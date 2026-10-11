@@ -224,6 +224,27 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(totals['b']['status'], 'ok')
         self.assertEqual({r['phase'] for r in records}, {'read','apply','save','image_total','batch_total'})
 
+    def test_application_one_file_uses_explicit_transform_name(self):
+        source = self.folder / 'scanner' / '40x'
+        source.mkdir(parents=True)
+        warps = self.folder / 'tissue' / '2x' / 'registered' / 'elastic registration' / 'save_warps'
+        (warps / 'D').mkdir(parents=True)
+        image = pattern(8, 10)
+        tifffile.imwrite(source / 'slide.ome.tif', image, resolution=(40000, 40000),
+                         resolutionunit='CENTIMETER')
+        savemat(warps / 'slide_S210.mat', {'zc': 1})
+        savemat(warps / 'slide_S360.mat', {'szz': [8, 10], 'padall': 0, 'f': 0,
+                'cent': [5.5, 4.5], 'tform_python': np.eye(3)})
+        Image.fromarray(image).save(warps.parent / 'slide_S210.jpg')
+        output = self.folder / 'tissue' / '40x' / 'registered'
+        result = subprocess.run([sys.executable, str(ROOT / '03_apply_registration/run_apply_registration.py'),
+            '--input-file', str(source / 'slide.ome.tif'), '--transform-name', 'slide_S210',
+            '--warps', str(warps), '--output', str(output), '--registration-mpp', '0.25'],
+            capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertTrue((output / 'slide_S210.ome.tif').is_file())
+        self.assertFalse((source / 'slide_S210.ome.tif').exists())
+
 
     def test_resolution_scaling_10x_20x_40x(self):
         for scale in (5, 10, 20):

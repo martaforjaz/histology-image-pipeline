@@ -431,7 +431,8 @@ def apply_CODA_registration(image, image_name, pthdata, scale, view_image, timin
 
     return image, overlay
 
-def process_images(pthim, image_list, pthdata, sx, out_folder, view_image=0, ome=1):
+def process_images(pthim, image_list, pthdata, sx, out_folder, view_image=0, ome=1,
+                   transform_name=None):
     """Process missing images by converting .ndpi, .svs, .scn, or .tif files to .tif or .ome.tif."""
 
     # Ensure the image directory exists
@@ -448,7 +449,7 @@ def process_images(pthim, image_list, pthdata, sx, out_folder, view_image=0, ome
 
                 # check if the image is already registered
                 #image_name = image_in_list.rsplit('.', 1)[0]
-                image_name = remove_extension(image_in_list)
+                image_name = transform_name or remove_extension(image_in_list)
                 if ome==1:
                     output_name = os.path.join(out_folder, image_name + '.ome.tif')
                 else:
