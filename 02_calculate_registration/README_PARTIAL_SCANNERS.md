@@ -48,6 +48,11 @@ partial outputs are never overwritten. Local logs are named
 `partial_worker_XX_*.log`, and the NAS audit filenames are unique across PCs.
 The same input TIFFs must not be assigned in the eight-scanner campaign.
 
+If a computer is still running an eight-scanner worker, use
+`queue_partial_worker.ps1` with the same arguments. It waits for local MATLAB
+processes to exit, then starts the partial worker; the default wait limit is
+24 hours. Do not start a second worker with the same ID elsewhere.
+
 Slides lacking an S210 TIFF cannot be registered under this S210-anchor rule.
 Do not silently substitute another scanner as the reference. A slide left
 partial after interruption must be reviewed and archived before replanning;
