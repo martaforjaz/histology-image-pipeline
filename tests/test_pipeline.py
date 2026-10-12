@@ -14,11 +14,13 @@ import numpy as np
 from PIL import Image
 from scipy.io import savemat
 import tifffile
+from openslide import OpenSlide
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / '01_conversion_downsampling'), str(ROOT / '03_apply_registration')]
 import WSI2OMEtif_All_file_types as multi
 import apply_registration_to_20x_image as registration
+import apply_40x_tiled
 from image_metadata import read_tiff_mpp
 import run_conversion as conversion_runner
 
@@ -244,6 +246,53 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertTrue((output / 'slide_S210.ome.tif').is_file())
         self.assertFalse((source / 'slide_S210.ome.tif').exists())
+
+    def test_tiled_application_matches_existing_algorithm(self):
+        source = self.folder / 'slide.ome.tif'
+        image = pattern(180, 190)
+        registration.save_ome_tif(image, str(source), .25)
+        warps = self.folder / 'registered' / 'elastic registration' / 'save_warps'
+        (warps / 'D').mkdir(parents=True)
+        fields = np.zeros((12, 13, 2), dtype=np.float32)
+        fy, fx = np.indices(fields.shape[:2])
+        fields[..., 0] = .3 + fx * .002
+        fields[..., 1] = -.2 + fy * .002
+        savemat(warps / 'slide_S210.mat', {'zc': 1})
+        affine = np.array([[.999, .012, 0], [-.012, .999, 0], [.2, -.3, 1]])
+        savemat(warps / 'slide_S360.mat', {'szz': [12, 13], 'padall': 1,
+                'f': 1, 'cent': [6.5, 6.5], 'tform_python': affine})
+        savemat(warps / 'D/slide_S360.mat', {'D': fields})
+        for name in ('slide_S210', 'slide_S360'):
+            Image.fromarray(pattern(12, 13)).save(warps.parent / (name + '.jpg'))
+        for name in ('slide_S210', 'slide_S360'):
+            with self.subTest(name=name):
+                with OpenSlide(str(source)) as slide:
+                    decoded = np.asarray(slide.read_region((0, 0), 0, slide.dimensions).convert('RGB'))
+                    expected, _ = registration.apply_CODA_registration(decoded, name, str(warps), 20, 0)
+                    metadata = apply_40x_tiled.load_mat_file(warps / 'slide_S360.mat')
+                    output_hw, pre = apply_40x_tiled.canvas_parameters(decoded.shape[:2], metadata, 20)
+                    if name == 'slide_S210':
+                        transform, field, flip = None, None, False
+                    else:
+                        transform = apply_40x_tiled.inverse_affine(metadata, 20)
+                        field = apply_40x_tiled.displacement_components(fields)
+                        flip = True
+                    rendered = np.zeros_like(expected)
+                    for y0 in range(0, output_hw[0], 128):
+                        for x0 in range(0, output_hw[1], 128):
+                            block = apply_40x_tiled.render_tile(slide, x0, y0, 128,
+                                                                 output_hw, pre, transform,
+                                                                 flip, field, 20)
+                            h = min(128, output_hw[0]-y0)
+                            w = min(128, output_hw[1]-x0)
+                            rendered[y0:y0+h, x0:x0+w] = block[:h, :w]
+                    np.testing.assert_array_equal(rendered, expected)
+                output = self.folder / (name + '.ome.tif')
+                apply_40x_tiled.apply_tiled(source, warps, name, output,
+                                           registration_mpp=5, tile_size=128)
+                actual = tifffile.imread(output)
+                self.assertEqual(actual.shape, expected.shape)
+                self.assertLess(np.mean(np.abs(actual.astype(int) - expected.astype(int))), 4)
 
 
     def test_resolution_scaling_10x_20x_40x(self):
