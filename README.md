@@ -143,6 +143,7 @@ An optional MATLAB integration check runs CODA on generated images and compares 
 - [Testing and known limitations](docs/VALIDATION.md)
 - [Using this repository on another computer](docs/GITHUB_WORKFLOW.md)
 - [Dataset downsampling validation](01_conversion_downsampling/VALIDATION_README.md)
+- [Scientific and technical documentation of multiscanner alignment](docs/alignment/README.md)
 - [Third-party attribution](THIRD_PARTY_NOTICES.md)
 
 No research images, patient information, network-share paths, MATLAB binaries, or Python virtual environments are included in the repository. Code and documentation are versioned; image data remains in a separately managed location.
